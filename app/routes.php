@@ -12,6 +12,8 @@ use Slim\Container;
 use Slim\Flash\Messages;
 use App\Session;
 use Slim\Views\Twig;
+use Psr\Log\LoggerInterface;
+use Swift_Mailer;
 
 // Index action.
 $container[IndexAction::class] = function (Container $container) {
@@ -28,7 +30,7 @@ $container[IndexJsAction::class] = function (Container $container) {
     );
 };
 
-$app->get('/index.js', IndexJsAction::class);
+$app->get('/js/index.js', IndexJsAction::class);
 
 $container[CitationsAction::class] = function(Container $container) {
     return new CitationsAction(
@@ -41,12 +43,36 @@ $container[CitationsAction::class] = function(Container $container) {
 
 $app->get('/citations/{oclc}', CitationsAction::class);
 
-$container[MarcAction::class] = function(Container $container) {
-    return new MarcAction(
+$container[EmailAction::class] = function(Container $container) {
+    return new EmailAction(
         $container[Messages::class],
         $container[Session::class],
-        $container[Twig::class]
+        $container[Twig::class],
+        $container[LoggerInterface::class],
+        $container[Swift_Mailer::class],
+        $container['settings']['smtp']['from'],
+        $container['settings']['smtp']['subject']
     );
+};
+
+$app->map(['GET', 'POST'], '/email', EmailAction::class);
+
+$container[TextAction::class] = function(Container $container) {
+    return new TextAction(
+        $container[Messages::class],
+        $container[Session::class],
+        $container[Twig::class],
+        $container[LoggerInterface::class],
+        $container[Swift_Mailer::class],
+        $container['settings']['smtp']['from'],
+        $container['settings']['smtp']['carriers']
+    );
+};
+
+$app->map(['GET', 'POST'], '/text', TextAction::class);
+
+$container[MarcAction::class] = function(Container $container) {
+    return new MarcAction();
 };
 
 $app->get('/marc', MarcAction::class);

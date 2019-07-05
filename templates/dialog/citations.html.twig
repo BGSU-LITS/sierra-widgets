@@ -1,0 +1,15 @@
+<div class="widgets-dialog">
+    <div tabindex="-1" data-a11y-dialog-hide></div>
+    <div role="dialog" aria-labelledby="widgets-citations-title" style="width:600px">
+        <h2 id="widgets-citations-title">Cite This</h2>
+        <div data-a11y-dialog-hide aria-label="Close this dialog" tabindex="-1">&times;</div>
+        <a href="https://www.worldcat.org/search?q=no:{{ oclc }}">
+            <img src="{{ base_url() }}/img/worldcat.svg" alt="Worldcat">
+        </a>
+        <p class="text-lead">Review citation for accuracy, paying special attention to personal names, capitalization, and dates. Consult <a href="http://www.bgsu.edu/library/assistance/citing-and-evaluating.html">this guide</a>	for more information.</p>
+{% for key, value in citations %}
+        <h3>{{ key }}</h3>
+        <p>{{ value|raw }}</p>
+{% endfor %}
+    </div>
+</div>

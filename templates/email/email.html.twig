@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<style>
+table {
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+
+th, td {
+    margin: 0;
+    padding: 0 1em 0 0;
+    text-align: left;
+    vertical-align: top;
+}
+
+img {
+    vertical-align: top;
+}
+</style>
+</head>
+<body>
+<div style="float:right">
+{{ jacket|raw }}
+</div>
+<table>
+{% for detail in details %}
+{{ detail|raw }}
+{% endfor %}
+</table>
+<table>
+{% for item in items %}
+{{ item|raw }}
+{% endfor %}
+</table>
+{% if from %}
+<div style="border-top:1px solid black">
+From {{ from }}
+</div>
+{% endif %}
+</body>
+</html>

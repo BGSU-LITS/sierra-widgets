@@ -1,0 +1,24 @@
+<div class="widgets-dialog">
+    <div tabindex="-1" data-a11y-dialog-hide></div>
+    <div role="dialog" aria-label="widgets-text-title-{{ id }}" style="width:300px">
+        <h2 id="widgets-text-title-{{ id }}">Text</h2>
+        <div data-a11y-dialog-hide aria-label="Close this dialog" tabindex="-1">&times;</div>
+{% for message in messages %}
+        <div class="alert alert-{{ message.level }}">{{ message.message }}</div>
+{% endfor %}
+        <form>
+            <label for="widgets-text-tel-{{ id }}">Phone Number</label>
+            <input type="tel" name="tel" id="widgets-text-tel-{{ id }}" value="{{ tel }}" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="ex. 419-318-1999" title="ex. 419-318-1999" required><br>
+            <label for="widgets-text-carrier-{{ id }}">Carrier</label>
+            <select name="carrier" id="widgets-text-carrier-{{ id }}" required>
+                <option value=""></option>
+{% for value, name in carriers %}
+                <option value="{{ value }}"{% if carrier == value %} selected{% endif %}>
+                    {{ name }}
+                </option>
+{% endfor %}
+            </select><br>
+            <input type="submit" value="Send" class="button button-primary">
+        </form>
+    </div>
+</div>

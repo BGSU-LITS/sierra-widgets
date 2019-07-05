@@ -1,0 +1,15 @@
+<div class="widgets-dialog">
+    <div tabindex="-1" data-a11y-dialog-hide></div>
+    <div role="dialog" aria-label="widgets-email-title-{{ id }}" style="width:300px">
+        <h2 id="widgets-email-title-{{ id }}">Email</h2>
+        <div data-a11y-dialog-hide aria-label="Close this dialog" tabindex="-1">&times;</div>
+{% for message in messages %}
+        <div class="alert alert-{{ message.level }}">{{ message.message }}</div>
+{% endfor %}
+        <form>
+            <label for="widgets-email-input-{{ id }}">Email Address</label>
+            <input type="email" name="email" id="widgets-email-input-{{ id }}" value="{{ email }}" required><br>
+            <input type="submit" value="Send" class="button button-primary">
+        </form>
+    </div>
+</div>

@@ -16,7 +16,10 @@
         "data-uri/twig-extension": "^1.0",
         "symfony/yaml": "^3.3",
         "aura/html": "^2.5",
-        "monolog/monolog": "^1.19"
+        "monolog/monolog": "^1.19",
+        "swiftmailer/swiftmailer": "^5.4",
+        "openbuildings/swiftmailer-css-inliner": "^0.4",
+        "imangazaliev/didom": "^1.14"
     },
     "autoload": {
         "psr-4": {

@@ -37,6 +37,27 @@ $settings = [
         'menu' => false
     ],
 
+    // SMTP settings.
+    'smtp' => [
+        // Server hostname.
+        'host' => false,
+
+        // Server port number. Default: 25
+        'port' => 25,
+
+        // From address of the email.
+        'from' => [
+            'name' => '',
+            'address' => ''
+        ],
+
+        // Subject line of the email.
+        'subject' => '',
+
+        # Providers with SMS gateways.
+        'carriers' => []
+    ],
+
     // Citations settings.
     'citations' => [
         // WorldCat Search API Web Services Key

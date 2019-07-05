@@ -90,7 +90,7 @@ class CitationsAction extends AbstractAction
         // Render the template.
         return $this->view->render(
             $res->withHeader('Access-Control-Allow-Origin', '*'),
-            'citations.html.twig',
+            'dialog/citations.html.twig',
             $args
         );
     }

@@ -1,0 +1,13 @@
+{
+  "name": "sierra-widgets",
+  "description": "Add widgets to bib records in the Sierra WebPAC.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BGSU-LITS/sierra-widgets.git"
+  },
+  "dependencies": {
+    "a11y-dialog": "^5.2.0"
+  },
+  "devDependencies": {}
+}

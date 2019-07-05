@@ -107,8 +107,25 @@ $container[Twig::class] = function (Container $container) {
     // Add Slim extension to the view.
     $view->addExtension(new \Slim\Views\TwigExtension(
         $container['router'],
-        $container['request']->getUri()
+        $container['request']->getUri()->withUserInfo('')
     ));
 
     return $view;
+};
+
+// Add Swift Mailer to the container.
+$container[\Swift_Mailer::class] = function (Container $container) {
+    // Create an SMTP transport for the mailer.
+    $transport = \Swift_SmtpTransport::newInstance(
+        $container['settings']['smtp']['host'],
+        $container['settings']['smtp']['port']
+    );
+
+    // Create a new mailer with the transport.
+    $mailer = \Swift_Mailer::newInstance($transport);
+
+    // Add CSS Inliner plugin to the mailer.
+    $mailer->registerPlugin(new \Openbuildings\Swiftmailer\CssInlinerPlugin);
+
+    return $mailer;
 };

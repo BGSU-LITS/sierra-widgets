@@ -11,6 +11,8 @@ namespace App\Action;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
+use DiDom\Document;
+
 /**
  * A class to be invoked for the index action.
  */
@@ -66,10 +68,15 @@ class MarcAction
         $url .= '/search/.' . $matches[1] . '/.' . $matches[1];
         $url .= '/1,1,1,B/marc~' . $matches[1];
 
-        $response = file_get_contents($url);
+        try {
+            $document = new Document($url, true);
+            $response = ltrim($document->first('pre')->text());
 
-        if (preg_match(':<pre.*?>(.+?)</pre>:s', $response, $matches)) {
-            return $res->write(ltrim($matches[1]));
+            if (!empty($response)) {
+                $res->write($response);
+            }
+        } catch (Exception $e) {
+            // Do nothing.
         }
 
         return $res;

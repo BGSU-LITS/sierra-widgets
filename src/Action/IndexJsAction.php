@@ -39,7 +39,7 @@ class IndexJsAction extends AbstractAction
         // Render form template.
         return $this->view->render(
             $res->withHeader('Content-Type', 'application/javascript'),
-            'index.js.twig',
+            'js/index.js.twig',
             $args
         );
     }

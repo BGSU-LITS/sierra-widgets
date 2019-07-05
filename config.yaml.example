@@ -18,6 +18,45 @@ template:
   # Menu for the site in the template.
   menu:
 
+# SMTP settings.
+smtp:
+  # Server hostname.
+  host: 'smtp.example.edu'
+  # Server port number. Default: 25
+  port: 25
+  # From address of the email.
+  from:
+    name: Library
+    address: library@example.edu
+  # Subject line of email.
+  subject: Your Record
+  # Carriers with SMS gateways.
+  carriers:
+    - name: Alltel
+      host: sms.alltelwireless.com
+    - name: AT&T
+      host: txt.att.net
+    - name: Boost
+      host: sms.myboostmobile.com
+    - name: Cricket
+      host: mms.cricketwireless.net
+    - name: Google Fi
+      host: msg.fi.google.com
+    - name: MetroPCS
+      host: mymetropcs.com
+    - name: Republic
+      host: text.republicwireless.com
+    - name: Sprint
+      host: messaging.sprintpcs.com
+    - name: T-Mobile
+      host: tmomail.net
+    - name: US Cellular
+      host: email.uscc.net
+    - name: Verizon
+      host: vtext.com
+    - name: Virgin
+      host: vmobl.com
+
 # Citations settings.
 citations:
   # WorldCat Search API Web Services Key
