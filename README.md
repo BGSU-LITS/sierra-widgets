@@ -2,16 +2,16 @@
 Add widgets to bib records in the Sierra WebPAC.
 
 ## Javascript
-The PHP application generates a Javascript file based on the configuration described below. This file is available in the public directory at `/index.js`. For example, if the application is installed on a path named `widgets` on the server `example.edu`, the Javascript may be referenced with:
+The PHP application generates a Javascript file based on the configuration described below. This file is available in the public directory at `/js/index.js`. For example, if the application is installed on a path named `widgets` on the server `example.edu`, the Javascript may be referenced with:
 ```
-<script src="https://example.edu/widgets/index.js"></script>
+<script src="https://example.edu/widgets/js/index.js"></script>
 ```
 
 At BGSU, this Javascript is added to the `screens/bib_display.html` file for the Sierra WebPAC.
 
 ### BGSU's Javascript as Example
 You may want to use your own application to handle applications instead of the version offered by this project. In that case, you may be interested in reviewing BGSU's copy of the Javascript file for adaption to your own system. It is online at:
-https://lib.bgsu.edu/catalog/widgets/index.js
+https://lib.bgsu.edu/catalog/widgets/js/index.js
 
 ## PHP Application
 ### Installation
@@ -41,6 +41,15 @@ The setting `app.debug` is primarly enabled when developing the application, and
 
 #### Template Settings
 These settings are primarly included to enable the use of a centralized collection of templates. If left as the default, you may edit the file `templates/page.html.twig` to configure the standard template used for each page. See below for further details about templates.
+
+#### SMTP Settings
+`smtp.host` and `smtp.port` should be configured with the details for your SMTP server.
+
+`smtp.from.name` and `smtp.from.address` should specify the name and email address of the sender of any message from a widget, including SMS.
+
+`smtp.subject` specifies the subject of any message from a widget, including SMS.
+
+`smtp.carriers` is a list of SMS carriers to display as options for sending SMS messages. Each item should have a `name` for the carrier's name, and a `host` with the domain name to use as an email-to-SMS gateway for that carrier. The example file has the most common carriers in the United States already defined.
 
 #### Citations Settings
 To use citations, you must configure the `citations.wskey` option with a [WorldCat Search API Web Services Key](https://platform.worldcat.org/wskey/).
