@@ -1,0 +1,173 @@
+(function() {
+    var item = {}, current;
+
+    // Get metadata from the item record.
+    Array.prototype.forEach.call(
+        document.querySelectorAll('.bibInfoEntry tr'),
+        function(element) {
+            var label = element.querySelector('.bibInfoLabel');
+
+            if (label) {
+                label = label.textContent.trim().replace(/:/, '');
+
+                if (label) {
+                    current = label;
+                }
+            }
+
+            switch(current) {
+                case 'ISBN':
+                case 'OCLC #':
+                case 'Permalink':
+                    if (typeof item[current] === 'undefined') {
+                        item[current] = [];
+                    }
+
+                    element = element.querySelector('.bibInfoData');
+
+                    item[current].push({
+                        element: element,
+                        content: element.textContent.trim()
+                    });
+            }
+        }
+    );
+
+    var bibkeys = [], oclc, permalink;
+
+    if (typeof item['ISBN'] !== 'undefined') {
+        item['ISBN'].forEach(function(data) {
+            var matches = data.content.match(/^(\d{9}|\d{12})(\d|X)/);
+
+            if (matches) {
+                bibkeys.push('ISBN:' + matches[0]);
+            }
+        });
+    }
+
+    if (typeof item['OCLC #'] !== 'undefined') {
+        item['OCLC #'].forEach(function(data) {
+            if (data.content.match(/^\d+$/)) {
+                bibkeys.push('OCLC:' + data.content);
+
+                data.element.innerHTML =
+                    '<a href="https://www.worldcat.org/search?q=no:' +
+                    data.content + '">' +
+                    data.content + '</a>';
+
+                oclc = data.content;
+            }
+        });
+    }
+
+    if (typeof item['Permalink'] !== 'undefined') {
+        item['Permalink'].forEach(function(data) {
+            if (data.content) {
+                permalink = data.content;
+                return;
+            }
+        });
+    }
+
+    if (bibkeys) {
+        var callback = '_' + Math.random().toString(36).substr(2);
+
+        window[callback] = function(data) {
+            var bib;
+
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    if (data[key].preview === 'full') {
+                        bib = data[key];
+                        break;
+                    }
+
+                    if (data[key].preview === 'partial' && !bib) {
+                        bib = data[key];
+                    }
+                }
+            }
+
+            if (bib) {
+                var widget = document.getElementById('widgets-google-preview');
+                widget.setAttribute('href', bib.preview_url);
+                widget.removeAttribute('aria-hidden');
+
+                var image = document.querySelector('.bibDisplayJacket img');
+                image.onload = function() {
+                    if (this.naturalHeight > 1) {
+                        return;
+                    }
+
+                    image.setAttribute(
+                        'src',
+                        bib.thumbnail_url.replace('&edge=curl', '')
+                    );
+                }
+
+                if (image.complete) {
+                    image.onload();
+                }
+            }
+        };
+
+        var script = document.createElement('script')
+        script.src = 'https://books.google.com/books?jscmd=viewapi' +
+            '&bibkeys=' + bibkeys.join(',') +
+            '&callback=' + callback;
+
+        document.head.appendChild(script);
+    }
+
+    if (oclc) {
+        var script = document.createElement('script')
+        script.src = '{{ base_url() }}/a11y-dialog.min.js';
+        document.head.appendChild(script);
+
+        var widget = document.getElementById('widgets-citations');
+        var widget_citation_dialog;
+
+        widget.addEventListener('click', function() {
+            if (widget_citation_dialog) {
+                widget_citation_dialog.show();
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function(event) {
+                document.getElementById('content').insertAdjacentHTML(
+                    'beforeend',
+                    event.target.response
+                );
+
+                widget_citation_dialog = new A11yDialog(
+                    document.getElementById('widgets-citations-dialog'),
+                    '#nothing'
+                );
+
+                widget_citation_dialog.show();
+            }
+
+            xhr.open('GET', '{{ base_url() }}/citations/' + oclc);
+            xhr.send();
+        });
+
+        widget.removeAttribute('aria-hidden');
+    }
+
+    if (permalink) {
+        var widget = document.getElementById('widgets-refworks');
+
+        widget.addEventListener('click', function() {
+            console.log(
+                'http://www.refworks.com/express/expressimport.asp?' +
+                'vendor=III&filter=MARC+Format&encoding=65001&' +
+                'url={{ base_url() }}/marc?permalink=' + permalink,
+                'RefWorksMain',
+                'width=960,height=640,scrollbars=yes'
+            );
+        });
+
+        widget.removeAttribute('aria-hidden');
+    }
+})();

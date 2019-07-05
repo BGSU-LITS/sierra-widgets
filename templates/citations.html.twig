@@ -1,0 +1,61 @@
+<div id="widgets-citations-dialog" class="widgets-dialog">
+    <div tabindex="-1" data-a11y-dialog-hide></div>
+    <div role="dialog" aria-labelledby="widgets-citations-title">
+        <h2 id="widgets-citations-title">Cite This</h2>
+        <a href="#" data-a11y-dialog-hide aria-label="Close this dialog">&times;</a>
+        <a href="https://www.worldcat.org/search?q=no:{{ oclc }}">
+            <img src="{{ base_url() }}/worldcat.svg" alt="Worldcat">
+        </a>
+        <p class="text-lead">Review citation for accuracy, paying special attention to personal names, capitalization, and dates. Consult <a href="http://www.bgsu.edu/library/assistance/citing-and-evaluating.html">this guide</a>	for more information.</p>
+{% for key, value in citations %}
+        <h3>{{ key }}</h3>
+        <p>{{ value|raw }}</p>
+{% endfor %}
+    </div>
+</div>
+<style>
+.widgets-dialog > [data-a11y-dialog-hide] {
+    background-color: rgba(0, 0, 0, 0.8);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+}
+
+.widgets-dialog > [role="dialog"] {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .6);
+    left: 0;
+    margin: 0 auto;
+    max-height: 90%;
+    max-width: 90%;
+    overflow: auto;
+    padding: 8px;
+    position: fixed;
+    right: 0;
+    top: 5%;
+    width: 600px;
+    z-index: 1001;
+}
+
+.widgets-dialog > [role="dialog"] > [data-a11y-dialog-hide] {
+    font: 2em "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;
+    position: absolute;
+    right: 8px;
+    text-decoration: none;
+    top: 0;
+}
+
+.widgets-dialog > [role="dialog"] img {
+    float: right;
+    width: 120px;
+}
+
+.widgets-dialog > [role="dialog"] .text-lead {
+    margin-right: 120px;
+}
+</style>
