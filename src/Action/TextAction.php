@@ -51,6 +51,12 @@ class TextAction extends AbstractAction
     private $carriers;
 
     /**
+     * Unproxy replacement.
+     * @var string
+     */
+    private $unproxy;
+
+    /**
      * Construct the action with objects and configuration.
      * @param Messages $flash Flash messenger.
      * @param Session $session Session manager.
@@ -59,6 +65,7 @@ class TextAction extends AbstractAction
      * @param Swift_Mailer Email sender.
      * @param array $from Email from address.
      * @param array carriers Text message carriers.
+     * @param string $unproxy Unproxy replacement.
      */
     public function __construct(
         Messages $flash,
@@ -67,13 +74,15 @@ class TextAction extends AbstractAction
         LoggerInterface $logger,
         Swift_Mailer $mailer,
         array $from,
-        array $carriers
+        array $carriers,
+        string $unproxy
     ) {
         parent::__construct($flash, $session, $view);
         $this->logger = $logger;
         $this->mailer = $mailer;
         $this->from = $from;
         $this->carriers = $carriers;
+        $this->unproxy = $unproxy;
     }
 
     /**
@@ -164,6 +173,14 @@ class TextAction extends AbstractAction
                 );
             }
 
+            if ($this->unproxy) {
+                $permalink = str_replace(
+                    $this->unproxy,
+                    '',
+                    $permalink
+                );
+            }
+
             $document = new Document($permalink, true);
 
             foreach ($document->find('.bibInfoData') as $data) {
@@ -194,11 +211,19 @@ class TextAction extends AbstractAction
                 $data = array_combine($headers, $row->find('td'));
 
                 if (!empty($data['Location'])) {
-                    $args['location'] = trim($data['Location']->text());
+                    $args['location'] = trim(str_replace(
+                        "\xc2\xa0",
+                        ' ',
+                        $data['Location']->text()
+                    ));
                 }
 
                 if (!empty($data['Call Number'])) {
-                    $args['callnumber'] = trim($data['Call Number']->text());
+                    $args['callnumber'] = trim(str_replace(
+                        "\xc2\xa0",
+                        ' ',
+                        $data['Call Number']->text()
+                    ));
                 }
 
                 break;

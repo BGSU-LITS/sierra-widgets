@@ -63,6 +63,12 @@ $settings = [
         // WorldCat Search API Web Services Key
         // https://platform.worldcat.org/wskey/
         'wskey' => false
+    ],
+
+    // Widgets settings.
+    'widgets' => [
+        // String to remove from permalinks to unproxy the URL.
+        'unproxy' => ''
     ]
 ];
 

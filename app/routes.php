@@ -51,7 +51,8 @@ $container[EmailAction::class] = function(Container $container) {
         $container[LoggerInterface::class],
         $container[Swift_Mailer::class],
         $container['settings']['smtp']['from'],
-        $container['settings']['smtp']['subject']
+        $container['settings']['smtp']['subject'],
+        $container['settings']['widgets']['unproxy']
     );
 };
 
@@ -65,14 +66,17 @@ $container[TextAction::class] = function(Container $container) {
         $container[LoggerInterface::class],
         $container[Swift_Mailer::class],
         $container['settings']['smtp']['from'],
-        $container['settings']['smtp']['carriers']
+        $container['settings']['smtp']['carriers'],
+        $container['settings']['widgets']['unproxy']
     );
 };
 
 $app->map(['GET', 'POST'], '/text', TextAction::class);
 
 $container[MarcAction::class] = function(Container $container) {
-    return new MarcAction();
+    return new MarcAction(
+        $container['settings']['widgets']['unproxy']
+    );
 };
 
 $app->get('/marc', MarcAction::class);

@@ -19,6 +19,20 @@ use DiDom\Document;
 class MarcAction
 {
     /**
+     * Unproxy replacement.
+     * @var string
+     */
+    private $unproxy;
+
+    /**
+     * Construct the action with objects and configuration.
+     * @param string $unproxy Unproxy replacement.
+     */
+    public function __construct(string $unproxy) {
+        $this->unproxy = $unproxy;
+    }
+
+    /**
      * Method called when class is invoked as an action.
      * @param Request $req The request for the action.
      * @param Response $res The response from the action.
@@ -36,6 +50,14 @@ class MarcAction
 
         if (empty($permalink)) {
             return $res;
+        }
+
+        if ($this->unproxy) {
+            $permalink = str_replace(
+                $this->unproxy,
+                '',
+                $permalink
+            );
         }
 
         $parsed = parse_url($permalink);

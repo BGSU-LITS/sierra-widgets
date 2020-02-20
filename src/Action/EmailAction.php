@@ -51,6 +51,12 @@ class EmailAction extends AbstractAction
     private $subject;
 
     /**
+     * Unproxy replacement.
+     * @var string
+     */
+    private $unproxy;
+
+    /**
      * Construct the action with objects and configuration.
      * @param Messages $flash Flash messenger.
      * @param Session $session Session manager.
@@ -59,6 +65,7 @@ class EmailAction extends AbstractAction
      * @param Swift_Mailer Email sender.
      * @param array $from Email from address.
      * @param string $subject Email subject.
+     * @param string $unproxy Unproxy replacement.
      */
     public function __construct(
         Messages $flash,
@@ -67,13 +74,15 @@ class EmailAction extends AbstractAction
         LoggerInterface $logger,
         Swift_Mailer $mailer,
         array $from,
-        string $subject
+        string $subject,
+        string $unproxy
     ) {
         parent::__construct($flash, $session, $view);
         $this->logger = $logger;
         $this->mailer = $mailer;
         $this->from = $from;
         $this->subject = $subject;
+        $this->unproxy = $unproxy;
     }
 
     /**
@@ -141,6 +150,14 @@ class EmailAction extends AbstractAction
             if (empty($permalink)) {
                 throw new RequestException(
                     'A permalink was not specified.'
+                );
+            }
+
+            if ($this->unproxy) {
+                $permalink = str_replace(
+                    $this->unproxy,
+                    '',
+                    $permalink
                 );
             }
 
