@@ -237,26 +237,11 @@
 
             element = document.querySelector('.bibDisplayJacket img');
 
-            if (element) {
-                element.onload = function() {
-                    if (this.naturalHeight > 1) {
-                        var div = document.createElement('div');
-                        div.textContent = 'Reviews & More';
-                        element.parentElement.appendChild(div);
-                        return;
-                    }
-
-                    if (bib) {
-                        this.setAttribute(
-                            'src',
-                            bib.thumbnail_url.replace('&edge=curl', '')
-                        );
-                    }
-                };
-
-                if (element.complete) {
-                    element.onload();
-                }
+            if (element && bib) {
+                element.setAttribute(
+                    'src',
+                    bib.thumbnail_url.replace('&edge=curl', '')
+                );
             }
         };
 
